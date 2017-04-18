@@ -106,7 +106,7 @@ tree.select('search', 'status')
   const results = tree.select(['search', 'results']);
   results.set([]);
 
-  var loc = new google.maps.LatLng(52.373975, 4.893982);
+  var loc = new google.maps.LatLng(59.336574, 18.067192);
   const location = tree.get('trip', 'coordinates');
   let query = tree.get('search', 'query');
   const filter = tree.get('search', 'filter');
@@ -143,7 +143,7 @@ tree.select('search', 'status')
       results.concat(res);
 
       if(pag.hasNextPage) {
-        //pag.nextPage();
+        pag.nextPage();
       } else {
         tree.set(['search', 'status'], 'done');
       }

@@ -1,8 +1,12 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
 import { Link } from 'react-router';
+import {
+  FontIcon,
+  RaisedButton,
+  FlatButton,
+  TextField
+ } from 'material-ui';
+
 
 const styles = {
   container: {
@@ -20,13 +24,16 @@ function StartPage() {
         hintText="Destination"
       />
       <Link to="/search">
-        <FlatButton 
+        <RaisedButton
           label="Go!"
           primary={true} />
       </Link>
-    
-      <h3>Or login to start</h3>
-      <RaisedButton label="Login" />
+
+      <h3>or</h3>
+      <RaisedButton
+        label="Login with Github"
+        icon={<FontIcon className="fa fa-github-square" />}
+      />
     </div>
   );
 }

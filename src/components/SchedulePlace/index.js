@@ -6,6 +6,7 @@ import {
   CardHeader,
   Paper,
   RaisedButton,
+  FlatButton,
   FontIcon
 } from 'material-ui';
 
@@ -123,10 +124,9 @@ export default class SchedulePlace extends React.Component {
       margin: 10
     };
     const removeButton = (
-      <RaisedButton
+      <FlatButton
         label=""
-        secondary={true}
-        style={{float: 'right'}}
+        style={{float: 'right', color: '#d1d1d1'}}
         icon={<FontIcon className="material-icons">delete</FontIcon>}
         onTouchTap={() => this.props.removePlace()}
       />

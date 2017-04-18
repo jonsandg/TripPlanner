@@ -5,9 +5,10 @@ import { root } from 'baobab-react/higher-order';
 import tree from 'model';
 
 class App extends React.Component {
+  
   render() {
     console.log(this.props.tree.get());
-    
+
     return (
       <MuiThemeProvider>
         {this.props.children}
@@ -17,4 +18,3 @@ class App extends React.Component {
 };
 
 export default root(tree, App);
-

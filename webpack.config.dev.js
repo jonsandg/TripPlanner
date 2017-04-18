@@ -43,8 +43,8 @@ module.exports = {
     alias: {
       components: path.resolve(__dirname, 'src/components/'),
       containers: path.resolve(__dirname, 'src/containers/'),
-      model: path.resolve(__dirname, 'src/model')
+      model: path.resolve(__dirname, 'src/model'),
+      firebase: path.resolve(__dirname, 'src/firebase'),
     }
   }
 };
-

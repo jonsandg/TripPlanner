@@ -23,18 +23,18 @@ function PlaceList({places, placeClick, addPlace}) {
         cols={4}>
         {places.map((place) => renderPlace(place, placeClick, addPlace))}
       </GridList>
-        
+
     </div>
   );
 }
 
 function renderPlace(place, click, add) {
 
-  const img2 = place.photos ? place.photos[0].getUrl({maxWidth: 800, maxHeight: 800}) : '';
-  const img = '';
+  const img = place.photos ? place.photos[0].getUrl({maxWidth: 800, maxHeight: 800}) : '';
+  //const img = '';
   const iconStyles = {
     marginRight: 5,
-    top: 5, 
+    top: 5,
     fontSize: 20
   };
   const subtitle = (<span>
@@ -44,7 +44,7 @@ function renderPlace(place, click, add) {
   const addButton = (<IconButton onTouchTap={() => add(place.place_id)}>
                       <FontIcon className="material-icons" color="white">add_box</FontIcon>
                     </IconButton>);
-  
+
   return (
     <GridTile
       key={place.place_id}
@@ -56,7 +56,7 @@ function renderPlace(place, click, add) {
       <img src={img} />
     </GridTile>
   );
-  
+
 }
 
 export default PlaceList;

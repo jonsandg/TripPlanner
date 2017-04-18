@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 
-//import GoogleMap from 'google-map-react';
+import GoogleMap from 'google-map-react';
 
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -12,14 +12,14 @@ import Spinner from 'components/Spinner';
 import MapMarker from 'components/MapMarker';
 
 export default class PlaceDialog extends React.Component {
-  
+
   constructor(props, context) {
     super(props, context);
-    
+
   }
-  
+
   render() {
-    
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -36,7 +36,7 @@ export default class PlaceDialog extends React.Component {
         }}
       />,
     ];
-    
+
     const styles = {
       map : {
         height: '400px',
@@ -59,14 +59,14 @@ export default class PlaceDialog extends React.Component {
         overflowY: 'auto',
       },
     };
-    
-    
+
+
     let dialogContent = <Spinner />;
-    
+
     if (!this.props.loading) {
       let photos = '';
       if(this.props.photos) {
-        
+
         photos = (
           <div>
             <GridList
@@ -80,7 +80,7 @@ export default class PlaceDialog extends React.Component {
           </div>
         );
       }
-      
+
       dialogContent = (
         <div>
            <p>{this.props.address}</p>
@@ -89,7 +89,7 @@ export default class PlaceDialog extends React.Component {
            {photos}
          </div>
       );
-    } 
+    }
 
     return (
       <Dialog
@@ -105,17 +105,25 @@ export default class PlaceDialog extends React.Component {
         </div>
         <div style={styles.rightBox}>
           <div id="dialog_map" style={styles.map}>
-            
+          <GoogleMap
+            bootstrapURLKeys={{key: "AIzaSyCBnyTzPsoug4grZ-pAhIFEBmnh32aTdv0"}}
+            center={this.props.location}
+            zoom={14}>
+            <MapMarker
+              lat={this.props.location[0]}
+              lng={this.props.location[1]}
+            />
+          </GoogleMap>
           </div>
         </div>
 
       </Dialog>
     );
   }
-  
+
   renderPhoto(photo) {
     const url = photo.getUrl({maxWidth: 800, maxHeight: 800});
-    
+
     return (
       <GridTile
         key={url}
