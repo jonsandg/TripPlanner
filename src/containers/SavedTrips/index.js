@@ -16,6 +16,8 @@ import {
 } from 'material-ui';
 
 class SavedTrips extends Component {
+//component that shows all of the users trips
+//from here the user can delete or show them
 
   constructor(...args) {
     super(...args);

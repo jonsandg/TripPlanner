@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Grid, Row, Col } from 'react-bootstrap';
 import {Link} from 'react-router';
 
 import { branch } from 'baobab-react/higher-order';
@@ -22,22 +21,19 @@ import {
 } from 'material-ui';
 
 class SearchPlaces extends React.Component {
-  
+  //Component that lets the user search and filter for places in the given city
+
   constructor(props, context) {
     super(props, context);
-    
+
     this.props.dispatch(
       actions.searchPlaces
     );
-    
-    var loc = new google.maps.LatLng(52.373975, 4.893982);
 
   }
-  
+
   render() {
-    
-    var loc = new google.maps.LatLng(52.373975, 4.893982);
-    var loc2 = [52.373975, 4.893982];
+
     return (
       <div className="half_container">
         <Toolbar>
@@ -72,14 +68,14 @@ class SearchPlaces extends React.Component {
               <MenuItem value="Religious buildings" primaryText="Religious buildings" />
             </DropDownMenu>
           </ToolbarGroup>
-          
+
         </Toolbar>
-        <PlaceList 
+        <PlaceList
           places={this.props.places}
           placeClick={(e, id) => this.onPlaceClick(e, id) }
           addPlace={(id) => this.onPlaceAdd(id)}
         />
-        <PlaceDialog 
+        <PlaceDialog
           open={this.props.dialog.open}
           close={() => this.onDialogClose()}
           location={this.props.dialog.position}
@@ -94,7 +90,7 @@ class SearchPlaces extends React.Component {
       </div>
     );
   }
-  
+
   onPlaceClick(event, id) {
     if (event.target.innerHTML === 'add_box') return; //don't open dialog when adding
     this.props.dispatch(
@@ -102,14 +98,14 @@ class SearchPlaces extends React.Component {
       id
     );
   }
-  
+
   onPlaceAdd(id) {
     this.props.dispatch(
       actions.addPlace,
       id
     );
   }
-  
+
   onDialogClose() {
     this.props.dispatch(
       actions.closeDialog
@@ -117,7 +113,6 @@ class SearchPlaces extends React.Component {
   }
 
   onFilterChange(value) {
-    console.log(value);
     this.props.dispatch(
       actions.filterChange,
       value
@@ -132,7 +127,6 @@ class SearchPlaces extends React.Component {
   }
 
   search(e) {
-    console.log(e);
     e.preventDefault();
     this.props.dispatch(
       actions.searchPlaces

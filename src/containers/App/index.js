@@ -7,9 +7,10 @@ import tree from 'model';
 import * as actions from './actions';
 
 class App extends React.Component {
+// Root component
+// MuiThemeProvider provides a theme to material-ui components
 
   render() {
-    console.log(this.props.tree.get());
 
     return (
       <MuiThemeProvider>

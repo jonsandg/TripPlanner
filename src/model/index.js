@@ -49,6 +49,7 @@ const initialTree = {
   }
 }
 
+//the application state is stored in a Baobab tree
 const tree = new Baobab(initialTree);
 
 tree
@@ -59,6 +60,8 @@ tree
 tree
 .select('user', 'id')
 .on('update', e => {
+  //fired when a user logs in/out
+  //if they logged in we grab their data from firebase
   const userID = e.data.currentData;
   if(userID) {
 
@@ -75,6 +78,7 @@ tree
         console.log('current', currentTrip);
         console.log('saved', savedTrips);
 
+        //firebase doesnt store empty arrays, so we add them when missing
         currentTrip.days = currentTrip.days.map(
           day => Object.assign({}, {places: []}, day)
         );
@@ -103,14 +107,18 @@ tree
 });
 
 const resetTree = () => {
+  //function that resets the tree to the initial state
+  //used when the user logs out
   tree.set(initialTree);
 };
 
 const uploadData = () => {
+  //function that uploads the current trips to firebase
+  //used by actions when the trips are updated
 
   const user = firebase.auth().currentUser;
 
-  if(!user) return;
+  if(!user) return; //don't upload if not logged in
 
   const userID = user.uid;
 
@@ -170,6 +178,7 @@ dialog.select('placeID')
 });
 
 //search places
+//used when the user enters a query or changes the filter
 tree.select('search', 'status')
 .on('update', (e) => {
 
@@ -198,9 +207,6 @@ tree.select('search', 'status')
     query += filter;
   }
 
-  console.log('q', query);
-  console.log('f', filter);
-
   const request = {
     location: location,
     query: query
@@ -210,7 +216,6 @@ tree.select('search', 'status')
     if(idCursor.get() !== searchID) return; //new search in place, stop this one
     if (serviceStatus === google.maps.places.PlacesServiceStatus.OK) {
 
-      console.log(res);
       const days = tree.get('trip', 'days');
       const addedIDs = days
       .reduce(
@@ -218,8 +223,6 @@ tree.select('search', 'status')
         []
       )
       .map(val => val.place_id);
-
-      console.log(res);
 
       res = res
       .filter(val => !addedIDs.includes(val.place_id))

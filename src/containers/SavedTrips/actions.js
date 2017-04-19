@@ -1,6 +1,7 @@
 import { browserHistory } from 'react-router';
 import { uploadData } from 'model';
 
+//removes a trip. index == -1 means it's the "current trip"
 export const removeTrip = (tree, index) => {
   if(index === -1) {
     tree.set(['trip', 'destination'], '');
@@ -10,6 +11,7 @@ export const removeTrip = (tree, index) => {
   uploadData();
 };
 
+//show a trip. browserHistory lets us change the url
 export const showTrip = (tree, index) => {
   if(index === -1) {
     browserHistory.push('/itinerary');

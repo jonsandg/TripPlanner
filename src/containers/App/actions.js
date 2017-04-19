@@ -3,31 +3,30 @@ import {provider, database} from 'firebase';
 import tree, {resetTree, uploadData} from 'model';
 
 export const logIn = (redirect) => {
+  //open a popup where the user can authorize in guthub
 
   firebase.auth().signInWithPopup(provider)
   .then(result => {
-
-    console.log('logged iun');
 
     const user = tree.select('user');
     user.set('id', result.user.uid);
     user.set('email', result.user.email);
 
   }).catch(err => {
-    console.log('login error');
     console.log(err);
   });
 };
 
 export const listenOnLogin = () => {
+  //listen on user changes (log in/out)
   firebase.auth().onAuthStateChanged(user => {
     if(user) {
-      console.log('logged innn');
+      //log in
       const userCursor = tree.select('user');
       userCursor.set('id', user.uid);
       userCursor.set('email', user.email);
-      console.log(tree.get());
     } else {
+      //log out
       resetTree();
       browserHistory.push('/');
     }
@@ -40,6 +39,7 @@ export const logOut = () => {
 };
 
 export const addTrip = (destination) => {
+  //we find a city's coordinates and image and redirect the user to /search
 
   const service = new google.maps.places.PlacesService(document.getElementById('map'));
   const request = {
