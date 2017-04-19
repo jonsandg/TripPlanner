@@ -15,27 +15,51 @@ const styles = {
   }
 };
 
-function StartPage() {
-  return (
-    <div style={styles.container}>
-      <h1>TripPlanner</h1>
-      <h3>Enter a destination</h3>
-      <TextField
-        hintText="Destination"
-      />
-      <Link to="/search">
+class StartPage extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      destination: ''
+    };
+  }
+
+  render() {
+    return (
+      <div style={styles.container}>
+        <h1>TripPlanner</h1>
+        <h3>Enter a destination</h3>
+        <TextField
+          hintText="Destination"
+          value={this.state.destination}
+          onChange={(e, val) => this.destinationChange(val)}
+        />
         <RaisedButton
           label="Go!"
-          primary={true} />
-      </Link>
+          primary={true}
+          onClick={() => this.submitDestination()}
+        />
+        <h3>or</h3>
+        <RaisedButton
+          label="Login with Github"
+          icon={<FontIcon className="fa fa-github-square" />}
+          onClick={() => props.logIn()}
+        />
+      </div>
+    );
+  }
 
-      <h3>or</h3>
-      <RaisedButton
-        label="Login with Github"
-        icon={<FontIcon className="fa fa-github-square" />}
-      />
-    </div>
-  );
+  destinationChange(value) {
+    this.setState({
+      destination: value
+    });
+  }
+
+  submitDestination() {
+    if(!this.state.destination) return;
+    this.props.addTrip(this.state.destination)
+  }
+
 }
 
 export default StartPage;

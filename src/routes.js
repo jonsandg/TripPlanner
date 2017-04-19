@@ -1,6 +1,7 @@
 import App from 'containers/App';
 import StartPage from 'components/StartPage';
 import TripPlanner from 'containers/TripPlanner';
+import SavedTrips from 'containers/SavedTrips';
 
 import React from 'react';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
@@ -16,9 +17,9 @@ const routes = {
   component: AppWrapper,
   indexRoute: {component: StartPage},
   childRoutes: [
-    { path: '/search', component: TripPlanner }
+    { path: '/search', component: TripPlanner },
+    { path: '/mytrips', component: SavedTrips },
   ]
 };
-          
+
 export default routes;
-  

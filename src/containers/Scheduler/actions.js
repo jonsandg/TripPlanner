@@ -3,7 +3,7 @@ export const changeDays = (tree, number) => {
   if(number < 1) return;
 
   const current = parseInt(tree.get(['trip', 'numberOfDays']));
-  
+
   /*
   only allow +1 and -1 changes to avoid deleting all days when changing to days > 9
   e.g. changing from 5 => 13 would delete all days but one when writing the first 1
@@ -23,7 +23,7 @@ export const removePlace = (tree, index, day) => {
 };
 
 export const placeDummy = (tree, index, day) => {
-  const dnd = tree.select('trip', 'dragAndDrop');
+  const dnd = tree.select('dragAndDrop');
   const days = tree.select('trip', 'days');
 
   //remove current dummy
@@ -47,15 +47,15 @@ export const beginDrag = (tree, index, day) => {
   daysCursor.unset([day, 'places', index]);
   placeDummy(tree, index, day);
 
-  tree.set(['trip', 'dragAndDrop', 'originalPosition'], [day, index]);
-  tree.set(['trip', 'dragAndDrop', 'place'], place);
+  tree.set(['dragAndDrop', 'originalPosition'], [day, index]);
+  tree.set(['dragAndDrop', 'place'], place);
   //tree.commit();
 };
 
 export const movePlace = (tree) => {
   console.log('moveplace');
 
-  const dnd = tree.select('trip', 'dragAndDrop');
+  const dnd = tree.select('dragAndDrop');
   const days = tree.select('trip', 'days');
   const place = dnd.get('place');
   console.log(place);

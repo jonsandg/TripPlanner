@@ -16,7 +16,7 @@ function TopBar(props) {
 
   if(props.loggedIn) {
     toolbarContent = (
-      <div>
+      <ToolbarGroup>
         <RaisedButton
           label="New Trip"
           primary={true}
@@ -28,14 +28,17 @@ function TopBar(props) {
         <RaisedButton
           label="Logout"
         />
-      </div>
+      </ToolbarGroup>
     );
   } else {
     toolbarContent = (
-      <RaisedButton
-        label="Login with Github"
-        icon={<FontIcon className="fa fa-github-square" />}
-      />
+      <ToolbarGroup>
+        <RaisedButton
+          label="Login with Github"
+          icon={<FontIcon className="fa fa-github-square" />}
+          onClick={() => props.logIn()}
+        />
+      </ToolbarGroup>
     );
   }
 
@@ -49,9 +52,7 @@ function TopBar(props) {
       >
         <ToolbarTitle text="TripPlanner" />
       </ToolbarGroup>
-      <ToolbarGroup>
-        {toolbarContent}
-      </ToolbarGroup>
+      {toolbarContent}
     </Toolbar>
   );
 }

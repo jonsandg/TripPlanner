@@ -10,4 +10,7 @@ const config = {
 firebase.initializeApp(config);
 
 const provider = new firebase.auth.GithubAuthProvider();
-export default provider;
+
+const database = firebase.database();
+
+export {provider, database}

@@ -119,7 +119,6 @@ export default class SchedulePlace extends React.Component {
       );
     }
 
-    const img = this.props.place.photos ? this.props.place.photos[0].getUrl({maxWidth: 200, maxHeight: 200}) : '';
     const style = {
       margin: 10
     };
@@ -139,7 +138,7 @@ export default class SchedulePlace extends React.Component {
         >
           <CardHeader
             title={this.props.place.name}
-            avatar={img}
+            avatar={this.props.place.img}
           >
             {removeButton}
           </CardHeader>

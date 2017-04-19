@@ -1,12 +1,17 @@
 import Baobab from 'baobab';
+import {database} from 'firebase';
 
 var now = new Date(Date.now());
 console.log(now);
 const tree = new Baobab({
 
-  savedTrips: [],
+  user: {
+    id: null,
+    email: null,
+    savedTrips: [],
+
+  },
   trip: {
-    name: '',
     destination: '',
     coordinates: [],
     startDate: now,
@@ -16,12 +21,12 @@ const tree = new Baobab({
         date: now,
         places: []
       }
-    ],
-    dragAndDrop: { //temporary holding for drag n drop
-      dummyPosition: [],
-      originalPosition: [],
-      place: null
-    }
+    ]
+  },
+  dragAndDrop: { //temporary holding for drag n drop
+    dummyPosition: [],
+    originalPosition: [],
+    place: null
   },
   search: {
     status: '',
@@ -43,16 +48,32 @@ const tree = new Baobab({
   }
 });
 
-/*
-tree.on('update', () => {
-  const days = tree.get('trip', 'days');
-
-  console.log('days');
-  for (var day of days) {
-    console.log(day.places);
-  }
+tree
+.select('trip')
+.on('update', () => {
+  uploadData();
 });
-*/
+
+const uploadData = () => {
+
+  const userID = firebase.auth().currentUser.uid;
+
+  //const userID = tree.get('user', 'id');
+
+  //if(!userID) return;
+
+  const savedTrips = tree.get('user', 'savedTrips');
+  const currentTrip = tree.get('trip');
+
+  database
+    .ref('users/' + userID)
+    .set({
+      savedTrips: savedTrips,
+      currentTrip: currentTrip
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+};
 
 const service = new google.maps.places.PlacesService(document.getElementById('map'));
 
@@ -106,8 +127,10 @@ tree.select('search', 'status')
   const results = tree.select(['search', 'results']);
   results.set([]);
 
-  var loc = new google.maps.LatLng(59.336574, 18.067192);
-  const location = tree.get('trip', 'coordinates');
+  var loc = new google.maps.LatLng(52.373775, 4.896228);
+  let location = tree.get('trip', 'coordinates');
+  location = new google.maps.LatLng(location[0], location[1]);
+
   let query = tree.get('search', 'query');
   const filter = tree.get('search', 'filter');
 
@@ -121,7 +144,7 @@ tree.select('search', 'status')
   console.log('f', filter);
 
   const request = {
-    location: loc,
+    location: location,
     query: query
   };
 
@@ -129,6 +152,7 @@ tree.select('search', 'status')
     if(idCursor.get() !== searchID) return; //new search in place, stop this one
     if (serviceStatus === google.maps.places.PlacesServiceStatus.OK) {
 
+      console.log(res);
       const days = tree.get('trip', 'days');
       const addedIDs = days
       .reduce(
@@ -137,13 +161,27 @@ tree.select('search', 'status')
       )
       .map(val => val.place_id);
 
+      console.log(res);
+
       res = res
-      .filter(val => !addedIDs.includes(val.place_id));
+      .filter(val => !addedIDs.includes(val.place_id))
+      .map(val => {
+        const img = val.photos ? val.photos[0].getUrl({maxWidth: 800, maxHeight: 800}) : '';
+        const location = val.geometry.location;
+
+        return {
+          name: val.name,
+          place_id: val.place_id,
+          rating: val.rating ? val.rating : null,
+          img: img,
+          position: [location.lat(), location.lng()]
+        };
+      });
 
       results.concat(res);
 
       if(pag.hasNextPage) {
-        pag.nextPage();
+        //pag.nextPage();
       } else {
         tree.set(['search', 'status'], 'done');
       }

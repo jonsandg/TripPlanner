@@ -30,8 +30,6 @@ function PlaceList({places, placeClick, addPlace}) {
 
 function renderPlace(place, click, add) {
 
-  const img = place.photos ? place.photos[0].getUrl({maxWidth: 800, maxHeight: 800}) : '';
-  //const img = '';
   const iconStyles = {
     marginRight: 5,
     top: 5,
@@ -53,7 +51,7 @@ function renderPlace(place, click, add) {
       actionIcon={addButton}
       onClick={(e) => click(e, place.place_id)}
     >
-      <img src={img} />
+      <img src={place.img} />
     </GridTile>
   );
 
