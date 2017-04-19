@@ -1,6 +1,6 @@
 # TripPlanner
 
-The app will be uploaded online thursday 2017-04-19. Until then:
+The app will be uploaded online thursday 2017-04-20. Until then:
 ### Instructions
 ```
 git clone https://github.com/jonsandg/TripPlanner.git
