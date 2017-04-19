@@ -6,8 +6,6 @@ import ItineraryDays from 'components/ItineraryDays';
 import ItineraryMap from 'components/ItineraryMap';
 import TopBar from 'components/TopBar';
 
-import * as actions from './actions';
-
 import {
   Toolbar,
   ToolbarGroup,
