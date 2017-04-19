@@ -52,7 +52,7 @@ export default class ScheduleDay extends React.Component {
       <Card style={{paddingBottom: 10}}>
         <CardHeader
           title={'Day ' + (this.props.day + 1)}
-          subtitle={this.props.date ? this.props.date.toLocaleDateString() : ''}
+          subtitle={this.props.date ? new Date(this.props.date).toLocaleDateString() : ''}
         />
         {places}
       </Card>

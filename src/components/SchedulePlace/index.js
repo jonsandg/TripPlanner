@@ -10,6 +10,9 @@ import {
   FontIcon
 } from 'material-ui';
 
+//the component in the schedule that is draggable
+//uses react-dnd for drag and drop
+
 const source = {
   beginDrag(props) {
     props.drag(props.index);
@@ -70,12 +73,6 @@ const target = {
     }
 
     monitor.getItem().day = hoverDay;
-  },
-
-  drop(props, monitor, component) {
-
-    //props.movePlace();
-    //return {success: true};
   }
 }
 
@@ -95,11 +92,6 @@ function collectTarget(connect) {
 @DragSource('SchedulePlace', source, collectSource)
 @DropTarget('SchedulePlace', target, collectTarget)
 export default class SchedulePlace extends React.Component {
-
-  constructor(props, context) {
-    super(props, context);
-
-  }
 
   render() {
 

@@ -1,10 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 import {
   Card,
   CardHeader,
   CardText,
-  Paper
+  Paper,
+  RaisedButton
 } from 'material-ui';
 
 let placeIndex;
@@ -18,10 +20,25 @@ function ItineraryDays(props) {
   hoverStart = props.hoverStart;
   hoverEnd = props.hoverEnd;
 
+  console.log('dayys in itin');
+  console.log(props.days);
+
   return (
     <div className="half_container">
-      <h1>{props.destination + ' trip'}</h1>
-      <h3>{props.days[0].date.toLocaleDateString() + ' - ' + props.days[props.days.length-1].date.toLocaleDateString()}</h3>
+      <div style={{height: 100}}>
+        <div style={{float: 'left'}}>
+          <h1>{props.destination + ' trip'}</h1>
+          <h3>{new Date(props.days[0].date).toLocaleDateString() + ' - ' + new Date(props.days[props.days.length-1].date).toLocaleDateString()}</h3>
+        </div>
+        <div style={{float: 'right', margin: 35}}>
+          <Link to="/search">
+            <RaisedButton
+              label="Go back"
+              primary={true}
+            />
+          </Link>
+        </div>
+      </div>
       {props.days.map(renderDay)}
     </div>
   );
@@ -36,7 +53,7 @@ function renderDay(day, index) {
     >
       <CardHeader
         title={'Day ' + (index + 1)}
-        subtitle={day.date.toLocaleDateString()}
+        subtitle={new Date(day.date).toLocaleDateString()}
         actAsExpander={true}
         showExpandableButton={true}
       />

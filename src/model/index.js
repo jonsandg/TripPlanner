@@ -3,8 +3,8 @@ import {database} from 'firebase';
 
 var now = new Date(Date.now());
 console.log(now);
-const tree = new Baobab({
 
+const initialTree = {
   user: {
     id: null,
     email: null,
@@ -14,11 +14,12 @@ const tree = new Baobab({
   trip: {
     destination: '',
     coordinates: [],
-    startDate: now,
+    img: '',
+    startDate: now.getTime(),
     numberOfDays: 1,
     days: [
       {
-        date: now,
+        date: now.getTime(),
         places: []
       }
     ]
@@ -46,24 +47,88 @@ const tree = new Baobab({
       position: []
     }
   }
+}
+
+//the application state is stored in a Baobab tree
+const tree = new Baobab(initialTree);
+
+tree
+.on('update', () => {
+  console.log('tree update', tree.get());
 });
 
 tree
-.select('trip')
-.on('update', () => {
-  uploadData();
+.select('user', 'id')
+.on('update', e => {
+  //fired when a user logs in/out
+  //if they logged in we grab their data from firebase
+  const userID = e.data.currentData;
+  if(userID) {
+
+    const savedTripsCursor = tree.select('user', 'savedTrips');
+    const currentTripCursor = tree.select('trip');
+
+    database
+      .ref('users/' + userID)
+      .once('value')
+      .then(data => {
+        let currentTrip = data.val().currentTrip;
+        let savedTrips = data.val().savedTrips;
+
+        console.log('current', currentTrip);
+        console.log('saved', savedTrips);
+
+        //firebase doesnt store empty arrays, so we add them when missing
+        currentTrip.days = currentTrip.days.map(
+          day => Object.assign({}, {places: []}, day)
+        );
+
+        if(savedTrips) {
+          for (var i = 0; i < savedTrips.length; i++) {
+            savedTrips[i].days = savedTrips[i].days.map(
+              day => Object.assign({}, {places: []}, day)
+            );
+          }
+        }
+
+        if(savedTrips) {
+          savedTripsCursor.set(savedTrips);
+        }
+
+        if(currentTripCursor.get('destination') !== '' && currentTrip) {
+          savedTrips.push(currentTrip);
+        } else if (currentTrip) {
+          currentTripCursor.set(currentTrip);
+        }
+
+      })
+      .catch(err => console.log(err));
+  }
 });
 
+const resetTree = () => {
+  //function that resets the tree to the initial state
+  //used when the user logs out
+  tree.set(initialTree);
+};
+
 const uploadData = () => {
+  //function that uploads the current trips to firebase
+  //used by actions when the trips are updated
 
-  const userID = firebase.auth().currentUser.uid;
+  const user = firebase.auth().currentUser;
 
-  //const userID = tree.get('user', 'id');
+  if(!user) return; //don't upload if not logged in
 
-  //if(!userID) return;
+  const userID = user.uid;
 
-  const savedTrips = tree.get('user', 'savedTrips');
-  const currentTrip = tree.get('trip');
+  let savedTrips = tree.clone('user', 'savedTrips');
+  let currentTrip = tree.clone('trip');
+  console.log('uploading', currentTrip);
+
+  if(currentTrip.destination === '') {
+    currentTrip = null;
+  }
 
   database
     .ref('users/' + userID)
@@ -74,6 +139,8 @@ const uploadData = () => {
       .then(res => console.log(res))
       .catch(err => console.log(err));
 };
+
+export {uploadData, resetTree};
 
 const service = new google.maps.places.PlacesService(document.getElementById('map'));
 
@@ -111,6 +178,7 @@ dialog.select('placeID')
 });
 
 //search places
+//used when the user enters a query or changes the filter
 tree.select('search', 'status')
 .on('update', (e) => {
 
@@ -127,7 +195,6 @@ tree.select('search', 'status')
   const results = tree.select(['search', 'results']);
   results.set([]);
 
-  var loc = new google.maps.LatLng(52.373775, 4.896228);
   let location = tree.get('trip', 'coordinates');
   location = new google.maps.LatLng(location[0], location[1]);
 
@@ -140,9 +207,6 @@ tree.select('search', 'status')
     query += filter;
   }
 
-  console.log('q', query);
-  console.log('f', filter);
-
   const request = {
     location: location,
     query: query
@@ -152,7 +216,6 @@ tree.select('search', 'status')
     if(idCursor.get() !== searchID) return; //new search in place, stop this one
     if (serviceStatus === google.maps.places.PlacesServiceStatus.OK) {
 
-      console.log(res);
       const days = tree.get('trip', 'days');
       const addedIDs = days
       .reduce(
@@ -160,8 +223,6 @@ tree.select('search', 'status')
         []
       )
       .map(val => val.place_id);
-
-      console.log(res);
 
       res = res
       .filter(val => !addedIDs.includes(val.place_id))
@@ -181,7 +242,7 @@ tree.select('search', 'status')
       results.concat(res);
 
       if(pag.hasNextPage) {
-        //pag.nextPage();
+        pag.nextPage();
       } else {
         tree.set(['search', 'status'], 'done');
       }
@@ -189,61 +250,5 @@ tree.select('search', 'status')
   });
 
 });
-
-//change number of days
-tree.select('trip', 'numberOfDays')
-.on('update', e => {
-  const previous = e.data.previousData;
-  const current = e.data.currentData;
-  const daysCursor = tree.select('trip', 'days');
-
-
-  if(current > previous) { //added a day
-
-    const date = new Date(tree.get('trip', 'startDate'));
-    let newDate = new Date(date);
-    newDate.setDate(newDate.getDate() + parseInt(current)-1);
-
-    daysCursor.push({
-      date: newDate,
-      places: []
-    });
-
-    return;
-  }
-
-  //removed a day
-  const lastDay = daysCursor.get(previous-1);
-  daysCursor.pop();
-
-  if(lastDay.places.length > 0) {
-    const length = daysCursor.get().length;
-    daysCursor
-      .select(length-1, 'places')
-      .concat(lastDay.places);
-  }
-
-});
-
-//change starting date
-tree.select('trip', 'startDate')
-.on('update', e => {
-  const date = e.data.currentData;
-  const duration = tree.get('trip', 'numberOfDays');
-  const daysCursor = tree.select('trip', 'days');
-
-  for(let i = 0; i < duration; i++) {
-    const day = daysCursor.select(i);
-    let startDate = new Date(date);
-    startDate.setDate(startDate.getDate() + i);
-    console.log(startDate);
-    day.set('date', startDate);
-  }
-
-});
-
-
-
-
 
 export default tree;

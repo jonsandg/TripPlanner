@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { branch } from 'baobab-react/higher-order';
 import {
   FontIcon,
   RaisedButton,
@@ -25,6 +26,22 @@ class StartPage extends React.Component {
   }
 
   render() {
+
+    const button = this.props.user ?
+    (
+      <Link to="/mytrips">
+        <RaisedButton
+          label="View my trips"
+        />
+      </Link>
+    ) : (
+      <RaisedButton
+        label="Login with Github"
+        icon={<FontIcon className="fa fa-github-square" />}
+        onClick={() => this.props.logIn()}
+      />
+    );
+
     return (
       <div style={styles.container}>
         <h1>TripPlanner</h1>
@@ -40,11 +57,7 @@ class StartPage extends React.Component {
           onClick={() => this.submitDestination()}
         />
         <h3>or</h3>
-        <RaisedButton
-          label="Login with Github"
-          icon={<FontIcon className="fa fa-github-square" />}
-          onClick={() => props.logIn()}
-        />
+        {button}
       </div>
     );
   }
@@ -57,9 +70,11 @@ class StartPage extends React.Component {
 
   submitDestination() {
     if(!this.state.destination) return;
-    this.props.addTrip(this.state.destination)
+    this.props.addTrip(this.state.destination);
   }
 
 }
 
-export default StartPage;
+export default branch({
+  user: ['user', 'id']
+}, StartPage);

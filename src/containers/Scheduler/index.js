@@ -12,7 +12,8 @@ import {
   TextField,
   FlatButton,
   FontIcon,
-  DatePicker
+  DatePicker,
+  RaisedButton
 } from 'material-ui';
 
 //The component where you can add and remove dates and move the places around
@@ -24,6 +25,7 @@ class Scheduler extends React.Component {
   }
 
   render() {
+
     return (
       <div className="half_container">
         <Toolbar>
@@ -33,16 +35,21 @@ class Scheduler extends React.Component {
           <ToolbarGroup>
             <DatePicker
               hintText="Trip date"
-              value={this.props.date}
+              value={new Date(this.props.date)}
               onChange={(e, date) => this.onDateChange(date)}
             />
             <TextField
               type="number"
               floatingLabelText="Days"
-              style={{bottom: '12px'}}
+              style={{bottom: '12px', width: 40}}
               value={this.props.duration}
               onChange={(e, val) => this.onDaysChange(val)}
             />
+            <Link to="/itinerary">
+              <RaisedButton
+                label="Itinerary"
+              />
+            </Link>
           </ToolbarGroup>
         </Toolbar>
         <div>
