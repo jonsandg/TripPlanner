@@ -19,16 +19,21 @@ function TopBar(props) {
   if(props.loggedIn) {
     toolbarContent = (
       <ToolbarGroup>
-        <RaisedButton
-          label="New Trip"
-          primary={true}
-        />
-        <RaisedButton
-          label="My Trips"
-        />
+        <Link to="/">
+          <RaisedButton
+            label="New Trip"
+            primary={true}
+          />
+        </Link>
+        <Link to="/mytrips">
+          <RaisedButton
+            label="My Trips"
+          />
+        </Link>
         <ToolbarSeparator />
         <RaisedButton
           label="Logout"
+          onClick={() => props.logOut()}
         />
       </ToolbarGroup>
     );
@@ -52,7 +57,9 @@ function TopBar(props) {
         firstChild={true}
         style={{backgroudColor: '#7ABFD6'}}
       >
-        <ToolbarTitle text="TripPlanner" />
+        <Link to="/" style={{ textDecoration: 'none', color: 'rgb(45, 45, 45)' }}>
+          <ToolbarTitle text="TripPlanner" />
+        </Link>
       </ToolbarGroup>
       {toolbarContent}
     </Toolbar>

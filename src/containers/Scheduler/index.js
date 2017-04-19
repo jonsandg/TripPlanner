@@ -14,7 +14,8 @@ import {
   TextField,
   FlatButton,
   FontIcon,
-  DatePicker
+  DatePicker,
+  RaisedButton
 } from 'material-ui';
 
 class Scheduler extends React.Component {
@@ -31,7 +32,6 @@ class Scheduler extends React.Component {
       console.log(day.places);
     }
 
-    console.log('');
 
     return (
       <div className="half_container">
@@ -42,16 +42,21 @@ class Scheduler extends React.Component {
           <ToolbarGroup>
             <DatePicker
               hintText="Trip date"
-              value={this.props.date}
+              value={new Date(this.props.date)}
               onChange={(e, date) => this.onDateChange(date)}
             />
             <TextField
               type="number"
               floatingLabelText="Days"
-              style={{bottom: '12px'}}
+              style={{bottom: '12px', width: 40}}
               value={this.props.duration}
               onChange={(e, val) => this.onDaysChange(val)}
             />
+            <Link to="/itinerary">
+              <RaisedButton
+                label="Itinerary"
+              />
+            </Link>
           </ToolbarGroup>
         </Toolbar>
         <div>

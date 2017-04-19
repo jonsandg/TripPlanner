@@ -1,3 +1,4 @@
+import { uploadData } from 'model';
 
 export const openDialog = (tree, placeID) => {
   tree.set(['search', 'dialog', 'placeID'], placeID);
@@ -36,6 +37,9 @@ export const addPlace = (tree, id) => {
     return false;
   });
 
+  if(!place) return;
+
   tree.push(['trip', 'days', 0, 'places'], place);
   tree.unset(['search', 'results', placeIndex]);
+  uploadData();
 };

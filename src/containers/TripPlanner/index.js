@@ -11,14 +11,25 @@ import TopBar from 'components/TopBar';
 
 class TripPlanner extends Component {
 
+/*
+  constructor(props, context) {
+    super(props, context);
+  }
+*/
   render () {
     console.log(this.props.user);
+
+    if(this.props.destination === '') {
+      this.props.router.push('/');
+      return null;
+    }
 
     return (
       <div>
         <TopBar
           loggedIn={this.props.user.id ? true : false}
           logIn={() => this.props.logIn(null)}
+          logOut={() => this.props.logOut()}
         />
         <Scheduler />
         <SearchPlaces />
@@ -29,6 +40,7 @@ class TripPlanner extends Component {
 };
 
 let branchedTripPlanner = branch({
-  user: ['user']
+  user: ['user'],
+  destination: ['trip', 'destination']
 }, TripPlanner);
 export default DragDropContext(HTML5Backend)(branchedTripPlanner);

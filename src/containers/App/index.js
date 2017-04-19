@@ -15,18 +15,23 @@ class App extends React.Component {
       <MuiThemeProvider>
         {React.cloneElement(this.props.children, {
           logIn: (redir) => this.logIn(redir),
+          logOut: () => this.logOut(),
           addTrip: (destination) => this.addTrip(destination)
         })}
       </MuiThemeProvider>
     );
   }
 
+  componentWillMount() {
+    actions.listenOnLogin();
+  }
+
   logIn(redirect) {
     actions.logIn(redirect);
   }
 
-  logOut(redirect) {
-
+  logOut() {
+    actions.logOut();
   }
 
   addTrip(destination) {

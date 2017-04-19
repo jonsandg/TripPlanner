@@ -25,7 +25,7 @@ class SearchPlaces extends React.Component {
     super(props, context);
     this.state = {
       hoverIndex: -1
-    }
+    };
   }
 
   render() {
@@ -42,7 +42,9 @@ class SearchPlaces extends React.Component {
     return (
       <div>
         <TopBar
-
+          loggedIn={this.props.user ? true : false}
+          logIn={() => this.props.logIn(null)}
+          logOut={() => this.props.logOut()}
         />
         <ItineraryDays
           destination={this.props.destination}
@@ -78,4 +80,5 @@ export default branch({
   days: ['trip', 'days'],
   destination: ['trip', 'destination'],
   coordinates: ['trip', 'coordinates'],
+  user: ['user', 'id'],
 }, SearchPlaces);

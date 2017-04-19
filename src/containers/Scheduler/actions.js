@@ -1,4 +1,7 @@
+import { uploadData } from 'model';
+
 export const changeDays = (tree, number) => {
+  number = parseInt(number);
 
   if(number < 1) return;
 
@@ -11,15 +14,58 @@ export const changeDays = (tree, number) => {
 
   if(number < current-1 || number > current+1) return;
   tree.set(['trip', 'numberOfDays'], number);
+
+  const daysCursor = tree.select('trip', 'days');
+
+  if(number > current) { //added a day
+    const date = new Date(tree.get('trip', 'startDate'));
+    let newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + parseInt(number)-1);
+
+    daysCursor.push({
+      date: newDate.getTime(),
+      places: []
+    });
+
+    return;
+  }
+
+  //removed a day
+  const lastDay = daysCursor.get(current-1);
+  daysCursor.pop();
+
+  if(lastDay.places.length > 0) {
+    const length = daysCursor.get().length;
+    daysCursor
+      .select(length-1, 'places')
+      .concat(lastDay.places);
+  }
+
+  uploadData();
+
 };
 
 export const changeDate = (tree, date) => {
-  tree.set(['trip', 'startDate'], date);
-  console.log(date);
+  tree.set(['trip', 'startDate'], date.getTime());
+
+  const duration = tree.get('trip', 'numberOfDays');
+  const daysCursor = tree.select('trip', 'days');
+
+  for(let i = 0; i < duration; i++) {
+    const day = daysCursor.select(i);
+    let startDate = new Date(date);
+    console.log(date);
+    startDate.setDate(startDate.getDate() + i);
+    console.log(startDate);
+    day.set('date', startDate.getTime());
+  }
+
+  uploadData();
 };
 
 export const removePlace = (tree, index, day) => {
   tree.unset(['trip', 'days', day, 'places', index]);
+  uploadData();
 };
 
 export const placeDummy = (tree, index, day) => {
@@ -63,5 +109,6 @@ export const movePlace = (tree) => {
   const dummyPostion = dnd.get('dummyPosition');
   days.set([dummyPostion[0], 'places', dummyPostion[1]], place);
   dnd.set('dummyPosition', []);
+  uploadData();
 
 };
