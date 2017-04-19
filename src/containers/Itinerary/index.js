@@ -19,7 +19,8 @@ import {
   MenuItem
 } from 'material-ui';
 
-class SearchPlaces extends React.Component {
+//Component with list of places and a map showing where the places are
+class Itinerary extends React.Component {
 
   constructor(props, context) {
     super(props, context);
@@ -78,4 +79,4 @@ export default branch({
   days: ['trip', 'days'],
   destination: ['trip', 'destination'],
   coordinates: ['trip', 'coordinates'],
-}, SearchPlaces);
+}, Itinerary);

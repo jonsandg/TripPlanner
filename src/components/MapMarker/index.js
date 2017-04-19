@@ -1,5 +1,6 @@
 import React from 'react';
 
+//the marker the shows a location on a map
 function MapMarker({text, hovering}) {
 
   const K_WIDTH = hovering ? 25 : 20;

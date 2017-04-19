@@ -15,6 +15,7 @@ const styles = {
   },
 };
 
+//the gridlist of places in search
 function PlaceList({places, placeClick, addPlace}) {
   return (
     <div>

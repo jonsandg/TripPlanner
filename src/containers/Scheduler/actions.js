@@ -22,6 +22,7 @@ export const removePlace = (tree, index, day) => {
   tree.unset(['trip', 'days', day, 'places', index]);
 };
 
+//place the "dummy place" which is there make space when dragging
 export const placeDummy = (tree, index, day) => {
   const dnd = tree.select('dragAndDrop');
   const days = tree.select('trip', 'days');

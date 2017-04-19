@@ -11,6 +11,7 @@ let placeIndex;
 let hoverStart;
 let hoverEnd;
 
+//the left side of the Itinerary, the list of days and places
 function ItineraryDays(props) {
 
   placeIndex = 0;

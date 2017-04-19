@@ -1,7 +1,5 @@
 import React from 'react';
-
 import {Link} from 'react-router';
-
 import { branch } from 'baobab-react/higher-order';
 
 import * as actions from './actions';
@@ -17,6 +15,7 @@ import {
   DatePicker
 } from 'material-ui';
 
+//The component where you can add and remove dates and move the places around
 class Scheduler extends React.Component {
 
   constructor(props, context) {
@@ -25,14 +24,6 @@ class Scheduler extends React.Component {
   }
 
   render() {
-
-    console.log('days');
-    for (var day of this.props.days) {
-      console.log(day.places);
-    }
-
-    console.log('');
-
     return (
       <div className="half_container">
         <Toolbar>
@@ -119,8 +110,6 @@ class Scheduler extends React.Component {
       day
     );
   }
-
-
 };
 
 export default branch({

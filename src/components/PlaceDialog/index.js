@@ -12,7 +12,7 @@ import Spinner from 'components/Spinner';
 import MapMarker from 'components/MapMarker';
 
 export default class PlaceDialog extends React.Component {
-
+//The dialog that appears when you click a place in search
   constructor(props, context) {
     super(props, context);
 
