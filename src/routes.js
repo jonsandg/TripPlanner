@@ -19,6 +19,5 @@ const routes = {
     { path: '/search', component: TripPlanner }
   ]
 };
-          
+
 export default routes;
-  
