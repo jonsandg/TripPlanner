@@ -23,10 +23,21 @@ class SearchPlaces extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-
+    this.state = {
+      hoverIndex: -1
+    }
   }
 
   render() {
+
+    const locations = this.props.days
+      .reduce(
+        (acc, cur) => acc.concat(cur.places),
+        []
+      )
+      .map(
+        val => val.position
+      );
 
     return (
       <div>
@@ -36,12 +47,30 @@ class SearchPlaces extends React.Component {
         <ItineraryDays
           destination={this.props.destination}
           days={this.props.days}
+          hoverStart={(i) => this.onHoverStart(i)}
+          hoverEnd={() => this.onHoverEnd()}
+
         />
         <ItineraryMap
-
+          location={this.props.coordinates}
+          markers={locations}
+          hoverIndex={this.state.hoverIndex}
         />
       </div>
     );
+  }
+
+  onHoverStart(index) {
+    console.log('hooveriung', index);
+    this.setState({
+      hoverIndex: index
+    });
+  }
+
+  onHoverEnd() {
+    this.setState({
+      hoverIndex: -1
+    });
   }
 };
 

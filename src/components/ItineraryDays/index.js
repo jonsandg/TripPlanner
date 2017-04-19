@@ -8,10 +8,15 @@ import {
 } from 'material-ui';
 
 let placeIndex;
+let hoverStart;
+let hoverEnd;
 
 function ItineraryDays(props) {
 
   placeIndex = 0;
+  hoverStart = props.hoverStart;
+  hoverEnd = props.hoverEnd;
+
   return (
     <div className="half_container">
       <h1>{props.destination + ' trip'}</h1>
@@ -44,14 +49,17 @@ function renderDay(day, index) {
 }
 
 function renderPlace(place) {
+  const index = placeIndex;
   placeIndex++;
   return (
     <Paper zDepth={2}
            style={{margin: 10}}
            key={place.place_id}
+           onMouseEnter={() => hoverStart(index)}
+           onMouseLeave={() => hoverEnd()}
     >
       <CardHeader
-        title={placeIndex + '. ' + place.name}
+        title={index + 1 + '. ' + place.name}
         avatar={place.img}
       />
     </Paper>
