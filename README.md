@@ -1,5 +1,7 @@
 # TripPlanner
 
+Project for [DH2642 Interaction Programming and the Dynamic Web](https://www.kth.se/student/kurser/kurs/DH2642?l=en) at KTH
+
 [Heroku link](https://fast-hamlet-95669.herokuapp.com)
 
 ### Instructions
